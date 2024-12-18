@@ -63,21 +63,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <button id="close-sidebar" class=" text-3xl">X</button>
             </div>
             <div class="flex flex-col items-center space-y-4 text-white">
-                <a href="#Contact" class="text-black text-lg">Blog</a>
+                <a href="index.php" class="text-black text-lg">Blog</a>
                 <a href="/pages/profile.php" class="text-black text-lg">Profile</a>
-                <a href="/pages/clients.php" class="text-black text-lg">Log out</a>
+                <a href="/pages/clients.php" class="text-red-500 text-lg">Log out</a>
             </div>
         </div>
         <div class="hidden lg:flex justify-center space-x-4">
             <ul class="flex items-center text-sm font-medium text-gray-400 mb-0 ">
                 <li>
-                    <a href="#Contact" class="hover:underline me-4 md:me-6">Blog</a>
+                    <a href="index.php" class="hover:underline me-4 md:me-6">Blog</a>
                 </li>
                 <li>
                     <a href="/pages/profile.php" class="hover:underline me-4 md:me-6">Profile</a>
                 </li>
                 <li>
-                    <a href="/pages/clients.php" class="hover:underline me-4 md:me-6">Log out</a>
+                    <a href="/pages/logout.php" class="text-red-500 hover:underline me-4 md:me-6">Log out</a>
                 </li>
             </ul>
         </div>

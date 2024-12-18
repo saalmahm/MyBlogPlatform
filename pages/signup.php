@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $query = "INSERT INTO users (username, email, password, role_id) VALUES ('$username', '$email', '$password', $role_id)";
 
         if (mysqli_query($conn, $query)) {
-            header("Location:../index.php");
+            header("Location:./login.php");
         } else {
             echo "Erreur : " . mysqli_error($conn);
         }
