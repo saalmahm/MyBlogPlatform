@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
         $image = $_FILES['image']['name'];
-        $target_dir = "./uploads/";
+        $target_dir ='../uploads/';
         $target_file = $target_dir . basename($image);
 
         if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
@@ -76,19 +76,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </li>
                 <li>
                     <a href="/pages/logout.php" class= "text-red-500 hover:underline me-4 md:me-6">Log out</a>
-                </li>
+                </li>  
             </ul>
         </div>
     </header>
-    <section class="bg-blue-200 py-4 relative ">
+    <section class="bg-blue-200 py-4 relative flex justify-between">
         <div class="px-6 lg:right-2">
-            <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-4"> 
+          <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-4"> 
                 <?php if (isset($_SESSION['username'])) {
-                    echo "Welcome, " . htmlspecialchars($_SESSION['username'])."👋​"; 
+                    echo "Welcome, " . htmlspecialchars($_SESSION['username']);
                 } else { 
                     echo "Welcome, Guest "; 
                 } ?> 
             </h1>            
+            <button class=" bg-blue-600 text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">Edit profile</button>
+          
             <button class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">Add an article</button>
         </div>
     </section>
@@ -127,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $query = "SELECT * FROM tags";
             $result = mysqli_query($conn, $query);
             while ($row = mysqli_fetch_assoc($result)) {
-                echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['name']) . "</option>";
+                echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['name']) ."</option>";
             }
             ?>
         </select>
@@ -159,7 +161,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $query = "SELECT articles.*, users.username FROM articles JOIN users ON articles.user_id = users.id WHERE articles.user_id = $user_id";            
               $result = mysqli_query($conn, $query); while ($row = mysqli_fetch_assoc($result)) { 
                 echo "<div class='bg-gray-100 rounded-lg shadow-md p-4'>"; 
-                echo "<h3 class='text-xl font-bold mb-2'>" . htmlspecialchars($row['title']) . "</h3>";
+                echo "<div class='flex'>";   
+               
+                                echo "<h3 class='text-xl font-bold mb-2 mr-60'>" . htmlspecialchars($row['title']) . "</h3>";
+                                echo "<button class='bg-green-700 text-white rounded-md px-2 mr-2 ml-10'>Edit</button>";
+                                echo "<button class='bg-red-700 text-white rounded-md px-2'>Delete</button>";
+                echo "</div>";
                  echo "<p class='text-gray-700 mb-4'>" . htmlspecialchars($row['content']) . "</p>";
                   echo "<img src='../uploads/" . htmlspecialchars($row['image']) . "' alt='Image de l\'article' class='w-full h-48 object-cover mb-4 rounded-lg'>"; 
                   echo "<p class='text-gray-600 text-sm'>Par " . htmlspecialchars($row['username']) . " le " . htmlspecialchars($row['created_at']) . "</p>";

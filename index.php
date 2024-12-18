@@ -83,12 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </header>
     <section class="bg-blue-200 py-4 relative">
         <div class="px-6 lg:right-2">           
-            <button class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">Add an article</button>
-        </div>
-    </section>
-
-            <div class="flex justify-center mt-8">
-                <form method="GET" action="">
+        <div class="flex justify-between mb-4">
+<form method="GET" action="">
                     <label for="category" class="block text-sm font-medium text-gray-700">Filtrer par catégorie :</label>
                     <select id="category" name="category" class="ml-2 p-2 border border-gray-300 rounded-md">
                         <?php
@@ -99,9 +95,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         }
                         ?>
                     </select>
-                    <button type="submit" class="ml-2 p-2 bg-gray-600 text-white rounded-md hover:bg-blue-700">Filtrer</button>
-                </form>
-            </div>
+                    <button type="submit" class="ml-2 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Filtrer</button>
+</form>
+
+    <button class="bg-blue-600 text-white p-2 py-0 rounded-md text-lg hover:bg-blue-700 " onclick="openModal()">Add an article</button>
+                
+</div>        </div>
+    </section>
 
     <div id="modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -166,14 +166,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container mx-auto px-4"> 
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Articles Disponibles</h2> 
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-             <?php $query = "SELECT articles.*, users.username FROM articles JOIN users ON articles.user_id = users.id";
-              $result = mysqli_query($conn, $query); while ($row = mysqli_fetch_assoc($result)) { 
-                echo "<div class='bg-gray-100 rounded-lg shadow-md p-4'>"; 
-                echo "<h3 class='text-xl font-bold mb-2'>" . htmlspecialchars($row['title']) . "</h3>";
-                 echo "<p class='text-gray-700 mb-4'>" . htmlspecialchars($row['content']) . "</p>";
-                  echo "<img src='./uploads/" . htmlspecialchars($row['image']) . "' alt='Image de l\'article' class='w-full h-48 object-cover mb-4 rounded-lg'>"; 
-                  echo "<p class='text-gray-600 text-sm'>Par " . htmlspecialchars($row['username']) . " le " . htmlspecialchars($row['created_at']) . "</p>";
-                   echo "</div>"; } ?> </div> </div>
+             <?php 
+             $query = "SELECT articles.*, users.username, GROUP_CONCAT(tags.name SEPARATOR ', ') AS tags 
+          FROM articles
+          JOIN users ON articles.user_id = users.id
+          LEFT JOIN article_tags ON articles.id = article_tags.article_id
+          LEFT JOIN tags ON article_tags.tag_id = tags.id
+          GROUP BY articles.id";
+$result = mysqli_query($conn, $query);
+
+while ($row = mysqli_fetch_assoc($result)) { 
+    echo "<div class='bg-gray-100 rounded-lg shadow-md p-4'>"; 
+    echo "<div class='flex'>";   
+    echo "<h3 class='text-xl font-bold mb-2 mr-60'>" . htmlspecialchars($row['title']) . "</h3>";
+    echo "<button class='bg-green-700 text-white rounded-md px-2 mr-2 ml-10'>Edit</button>";
+    echo "<button class='bg-red-700 text-white rounded-md px-2'>Delete</button>";
+    echo "</div>";                 
+    echo "<p class='text-gray-700 mb-4'>" . htmlspecialchars($row['content']) . "</p>";
+    echo "<img src='./uploads/" . htmlspecialchars($row['image']) . "' alt='Image de l\'article' class='w-full h-48 object-cover mb-4 rounded-lg'>"; 
+    echo "<p class='text-gray-600 text-sm'>Par " . htmlspecialchars($row['username']) . " le " . htmlspecialchars($row['created_at']) . "</p>";
+    if (!empty($row['tags'])) {
+        echo "<p class='text-blue-600 text-sm'>Tags : " . htmlspecialchars($row['tags']) . "</p>";
+    }
+    echo "</div>"; 
+}
+ ?> </div> </div>
     <script>
 
         const menu = document.getElementById("burger-icon");
