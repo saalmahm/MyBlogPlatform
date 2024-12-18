@@ -1,6 +1,43 @@
 <?php
 include('../includes/db.php');
 session_start();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+    $user_id = $_SESSION['user_id'];
+    $tags = $_POST['tags']; 
+
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+        $image = $_FILES['image']['name'];
+        $target_dir = "./uploads/";
+        $target_file = $target_dir . basename($image);
+
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
+            $query = "INSERT INTO articles (title, content, image, user_id) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("sssi", $title, $content, $image, $user_id);
+
+            if ($stmt->execute()) {
+                $article_id = $stmt->insert_id;
+
+                $tag_query = "INSERT INTO article_tags (article_id, tag_id) VALUES (?, ?)";
+                $tag_stmt = $conn->prepare($tag_query);
+
+                foreach ($tags as $tag_id) {
+                    $tag_stmt->bind_param("ii", $article_id, $tag_id);
+                    $tag_stmt->execute();
+                }
+
+            } else {
+                echo "Erreur : " . $stmt->error;
+            }
+        } else {
+            echo "Erreur lors du téléchargement de l'image.";
+        }
+    } else {
+        echo "Aucune image téléchargée ou erreur lors du téléchargement.";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +53,7 @@ session_start();
             <img src="images/cars.gif" alt="">
         </a>
         <div class="lg:hidden" id="burger-icon">
-            <img src="images/menu.png" alt="Menu">
+            <img src="/images/menu.png" alt="Menu">
         </div>
         <div id="sidebar"
             class="shadow-xl fixed top-0 right-0 w-1/3 h-full bg-gray-200  z-50 transform translate-x-full duration-300 ">
@@ -69,5 +106,22 @@ session_start();
                   echo "<p class='text-gray-600 text-sm'>Par " . htmlspecialchars($row['username']) . " le " . htmlspecialchars($row['created_at']) . "</p>";
                    echo "</div>"; } ?> </div> </div>
     </section>
+    <script>
+
+const menu = document.getElementById("burger-icon");
+const sidebar = document.getElementById("sidebar");
+const closeSidebar = document.getElementById("close-sidebar");
+
+menu.addEventListener("click", () => {
+    sidebar.classList.remove("translate-x-full");  
+    sidebar.classList.add("translate-x-0");
+});
+
+closeSidebar.addEventListener("click", () => {
+    sidebar.classList.add("translate-x-full");    
+    sidebar.classList.remove("translate-x-0");   
+});
+
+</script>
 </body>
 </html>

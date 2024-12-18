@@ -20,9 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
         $image = $_FILES['image']['name'];
-        $target_dir = "./uploads/";
+        $target_dir = './uploads/';
         $target_file = $target_dir . basename($image);
-
         if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
             $query = "INSERT INTO articles (title, content, image, user_id) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($query);
@@ -190,6 +189,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             sidebar.classList.add("translate-x-full");    
             sidebar.classList.remove("translate-x-0");   
         });
+        function openModal() {
+        const modal = document.getElementById('modal');
+        modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('modal');
+        modal.classList.add('hidden');
+    }
     </script>
 </body>
 </html>
