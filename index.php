@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $tag_stmt->execute();
                 }
 
-                echo "Article ajouté avec succès avec les tags associés !";
             } else {
                 echo "Erreur : " . $stmt->error;
             }
@@ -65,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="flex flex-col items-center space-y-4 text-white">
                 <a href="#Contact" class="text-black text-lg">Blog</a>
-                <a href="/pages/voitures.php" class="text-black text-lg">Profile</a>
+                <a href="/pages/profile.php" class="text-black text-lg">Profile</a>
                 <a href="/pages/clients.php" class="text-black text-lg">Log out</a>
             </div>
         </div>
@@ -75,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a href="#Contact" class="hover:underline me-4 md:me-6">Blog</a>
                 </li>
                 <li>
-                    <a href="/pages/voitures.php" class="hover:underline me-4 md:me-6">Profile</a>
+                    <a href="/pages/profile.php" class="hover:underline me-4 md:me-6">Profile</a>
                 </li>
                 <li>
                     <a href="/pages/clients.php" class="hover:underline me-4 md:me-6">Log out</a>
@@ -84,14 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </header>
     <section class="bg-blue-200 py-4 relative">
-        <div class="px-6 lg:right-2">
-            <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-4"> 
-                <?php if (isset($_SESSION['username'])) {
-                    echo "Welcome, " . htmlspecialchars($_SESSION['username'])."👋​"; 
-                } else { 
-                    echo "Welcome, Guest"; 
-                } ?> 
-            </h1>            
+        <div class="px-6 lg:right-2">           
             <button class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">Add an article</button>
         </div>
     </section>
@@ -108,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         }
                         ?>
                     </select>
-                    <button type="submit" class="ml-2 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Filtrer</button>
+                    <button type="submit" class="ml-2 p-2 bg-gray-600 text-white rounded-md hover:bg-blue-700">Filtrer</button>
                 </form>
             </div>
 
@@ -171,6 +163,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
  </div>
  </div>
 
+ <section class="bg-white py-8"> 
+    <div class="container mx-auto px-4"> 
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Articles Disponibles</h2> 
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+             <?php $query = "SELECT articles.*, users.username FROM articles JOIN users ON articles.user_id = users.id";
+              $result = mysqli_query($conn, $query); while ($row = mysqli_fetch_assoc($result)) { 
+                echo "<div class='bg-gray-100 rounded-lg shadow-md p-4'>"; 
+                echo "<h3 class='text-xl font-bold mb-2'>" . htmlspecialchars($row['title']) . "</h3>";
+                 echo "<p class='text-gray-700 mb-4'>" . htmlspecialchars($row['content']) . "</p>";
+                  echo "<img src='./uploads/" . htmlspecialchars($row['image']) . "' alt='Image de l\'article' class='w-full h-48 object-cover mb-4 rounded-lg'>"; 
+                  echo "<p class='text-gray-600 text-sm'>Par " . htmlspecialchars($row['username']) . " le " . htmlspecialchars($row['created_at']) . "</p>";
+                   echo "</div>"; } ?> </div> </div>
     <script>
 
         const menu = document.getElementById("burger-icon");
