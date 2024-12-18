@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $tag_stmt->bind_param("ii", $article_id, $tag_id);
                     $tag_stmt->execute();
                 }
-
             } else {
                 echo "Erreur : " . $stmt->error;
             }
@@ -39,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="flex flex-col items-center space-y-4 text-white">
                 <a href="/index.php" class="text-black text-lg">Blog</a>
                 <a href="/pages/profile.php" class="text-black text-lg">Profile</a>
+                <a href="/pages/dashboard.php" class="text-black text-lg">Dashboard</a>
                 <a href="/pages/logout.php" class="text-red-500 text-lg">Log out</a>
             </div>
         </div>
@@ -73,6 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </li>
                 <li>
                     <a href="/pages/profile.php" class="hover:underline me-4 md:me-6">Profile</a>
+                </li>
+                <li>
+                    <a href="/pages/dashboard.php" class="hover:underline me-4 md:me-6">Dashboard</a>
                 </li>
                 <li>
                     <a href="/pages/logout.php" class= "text-red-500 hover:underline me-4 md:me-6">Log out</a>
@@ -153,49 +157,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
  </div>
  </div>
  </div>
-    <section>
+<section>
     <div class="container mx-auto px-4 mt-10"> 
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-             <?php
-            $user_id = $_SESSION['user_id'];
-            $query = "SELECT articles.*, users.username FROM articles JOIN users ON articles.user_id = users.id WHERE articles.user_id = $user_id";            
-              $result = mysqli_query($conn, $query); while ($row = mysqli_fetch_assoc($result)) { 
-                echo "<div class='bg-gray-100 rounded-lg shadow-md p-4'>"; 
-                echo "<div class='flex'>";   
-               
-                                echo "<h3 class='text-xl font-bold mb-2 mr-60'>" . htmlspecialchars($row['title']) . "</h3>";
-                                echo "<button class='bg-green-700 text-white rounded-md px-2 mr-2 ml-10'>Edit</button>";
-                                echo "<button class='bg-red-700 text-white rounded-md px-2'>Delete</button>";
-                echo "</div>";
-                 echo "<p class='text-gray-700 mb-4'>" . htmlspecialchars($row['content']) . "</p>";
-                  echo "<img src='../uploads/" . htmlspecialchars($row['image']) . "' alt='Image de l\'article' class='w-full h-48 object-cover mb-4 rounded-lg'>"; 
-                  echo "<p class='text-gray-600 text-sm'>Par " . htmlspecialchars($row['username']) . " le " . htmlspecialchars($row['created_at']) . "</p>";
-                   echo "</div>"; } ?> </div> </div>
-    </section>
-    <script>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+             <?php 
+              $user_id = $_SESSION['user_id'];
+            $query = "
+            SELECT articles.*, 
+                   users.username, 
+                   GROUP_CONCAT(tags.name SEPARATOR ', ') AS tags 
+            FROM articles
+            JOIN users ON articles.user_id = users.id
+            LEFT JOIN article_tags ON articles.id = article_tags.article_id
+            LEFT JOIN tags ON article_tags.tag_id = tags.id
+            WHERE articles.user_id = $user_id
+            GROUP BY articles.id
+        ";
+$result = mysqli_query($conn, $query);
 
-const menu = document.getElementById("burger-icon");
-const sidebar = document.getElementById("sidebar");
-const closeSidebar = document.getElementById("close-sidebar");
-
-menu.addEventListener("click", () => {
-    sidebar.classList.remove("translate-x-full");  
-    sidebar.classList.add("translate-x-0");
-});
-
-closeSidebar.addEventListener("click", () => {
-    sidebar.classList.add("translate-x-full");    
-    sidebar.classList.remove("translate-x-0");   
-});
-function openModal() {
-        const modal = document.getElementById('modal');
-        modal.classList.remove('hidden');
+while ($row = mysqli_fetch_assoc($result)) { 
+    echo "<div class='bg-gray-100 rounded-lg shadow-md p-4'>"; 
+    echo "<div class='flex'>";   
+    echo "<h3 class='text-xl font-bold mb-2 mr-60'>" . htmlspecialchars($row['title']) . "</h3>";
+    echo "<button class='bg-green-700 text-white rounded-md px-2 mr-2 ml-10'>Edit</button>";
+echo "<button class='bg-red-700 text-white rounded-md px-2'>
+        <a href='delete_article.php?id=" . $row['id'] . "'>Delete</a>
+      </button>";
+    echo "</div>";                 
+    echo "<p class='text-gray-700 mb-4'>" . htmlspecialchars($row['content']) . "</p>";
+    echo "<img src='/uploads/" . htmlspecialchars($row['image']) . "' alt='Image de l\'article' class='w-full h-48 object-cover mb-4 rounded-lg'>"; 
+    echo "<p class='text-gray-600 text-sm'>Par " . htmlspecialchars($row['username']) . " le " . htmlspecialchars($row['created_at']) . "</p>";
+    if (!empty($row['tags'])) {
+        echo "<p class='text-blue-600 text-sm'>Tags : " . htmlspecialchars($row['tags']) . "</p>";
     }
+    echo "</div>"; 
+}
+ ?> 
+ </div>
+    </div>
+</section>
+<script>
+    const menu = document.getElementById("burger-icon");
+    const sidebar = document.getElementById("sidebar");
+    const closeSidebar = document.getElementById("close-sidebar");
 
-    function closeModal() {
-        const modal = document.getElementById('modal');
-        modal.classList.add('hidden');
-    }
+    menu.addEventListener("click", () => {
+        sidebar.classList.remove("translate-x-full");  
+        sidebar.classList.add("translate-x-0");
+    });
+
+    closeSidebar.addEventListener("click", () => {
+        sidebar.classList.add("translate-x-full");    
+        sidebar.classList.remove("translate-x-0");   
+    });
+    function openModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('hidden');
+        }
 
 </script>
 </body>

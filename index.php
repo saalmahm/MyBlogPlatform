@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="flex flex-col items-center space-y-4 text-white">
                 <a href="index.php" class="text-black text-lg">Blog</a>
                 <a href="/pages/profile.php" class="text-black text-lg">Profile</a>
+                <a href=""  class="text-black text-lg">Dashboard</a>
                 <a href="/pages/clients.php" class="text-red-500 text-lg">Log out</a>
             </div>
         </div>
@@ -74,6 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </li>
                 <li>
                     <a href="/pages/profile.php" class="hover:underline me-4 md:me-6">Profile</a>
+                </li>
+                <li>
+                    <a href="/pages/profile.php" class="hover:underline me-4 md:me-6">Dashboard</a>
                 </li>
                 <li>
                     <a href="/pages/logout.php" class="text-red-500 hover:underline me-4 md:me-6">Log out</a>
@@ -161,7 +165,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
  </div>
  </div>
  </div>
-
  <section class="bg-white py-8"> 
     <div class="container mx-auto px-4"> 
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Articles Disponibles</h2> 
@@ -179,8 +182,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='bg-gray-100 rounded-lg shadow-md p-4'>"; 
     echo "<div class='flex'>";   
     echo "<h3 class='text-xl font-bold mb-2 mr-60'>" . htmlspecialchars($row['title']) . "</h3>";
-    echo "<button class='bg-green-700 text-white rounded-md px-2 mr-2 ml-10'>Edit</button>";
-    echo "<button class='bg-red-700 text-white rounded-md px-2'>Delete</button>";
     echo "</div>";                 
     echo "<p class='text-gray-700 mb-4'>" . htmlspecialchars($row['content']) . "</p>";
     echo "<img src='./uploads/" . htmlspecialchars($row['image']) . "' alt='Image de l\'article' class='w-full h-48 object-cover mb-4 rounded-lg'>"; 
@@ -190,7 +191,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     }
     echo "</div>"; 
 }
- ?> </div> </div>
+ ?> 
+ </div>
+ </div>
     <script>
 
         const menu = document.getElementById("burger-icon");
