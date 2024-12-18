@@ -92,6 +92,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">Add an article</button>
         </div>
     </section>
+
+    <div id="modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Add an Article
+                            </h3>
+                            <div class="mt-2">
+                            <form id="articleForm" method="POST" enctype="multipart/form-data">
+    <div class="mb-4">
+        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+        <input type="text" id="title" name="title" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" required>
+    </div>
+    <div class="mb-4">
+        <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
+        <textarea id="content" name="content" rows="4" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" required></textarea>
+    </div>
+    <div class="mb-4">
+        <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
+        <input type="file" id="image" name="image" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" required>
+    </div>
+    <div class="mb-4">
+        <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+        <select id="tags" name="tags[]" multiple class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+            <?php
+            $query = "SELECT * FROM tags";
+            $result = mysqli_query($conn, $query);
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['name']) . "</option>";
+            }
+            ?>
+        </select>
+        <small class="text-gray-500">Hold Ctrl (or Command on Mac) to select multiple tags.</small>
+    </div>
+    <div class="sm:flex sm:items-center">
+        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm">
+            Add Article
+        </button>
+        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal()">
+            Cancel
+        </button>
+    </div>
+</form>
+
+
+</div>
+</div>
+ </div>
+</div>
+ </div>
+ </div>
+ </div>
     <section>
     <div class="container mx-auto px-4 mt-10"> 
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -121,6 +180,15 @@ closeSidebar.addEventListener("click", () => {
     sidebar.classList.add("translate-x-full");    
     sidebar.classList.remove("translate-x-0");   
 });
+function openModal() {
+        const modal = document.getElementById('modal');
+        modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('modal');
+        modal.classList.add('hidden');
+    }
 
 </script>
 </body>
