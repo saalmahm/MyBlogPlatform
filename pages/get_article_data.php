@@ -3,7 +3,6 @@ include('../includes/db.php');
 if (isset($_GET['id'])) {
     $article_id = $_GET['id'];
 
-    // Fetch the article data from the database
     $query = "
         SELECT articles.*, GROUP_CONCAT(tags.name SEPARATOR ', ') AS tags 
         FROM articles

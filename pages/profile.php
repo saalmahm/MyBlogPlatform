@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css"  rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
@@ -92,10 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 } else { 
                     echo "Welcome, Guest "; 
                 } ?> 
-            </h1>            
-            <button class=" bg-blue-600 text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">Edit profile</button>
-          
-            <button class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">Add an article</button>
+            </h1>                      
+            <button class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">+ Add an article</button>
         </div>
     </section>
 
@@ -179,7 +178,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo "<div class='bg-gray-100 rounded-lg shadow-md p-4'>"; 
     echo "<div class='flex'>";   
     echo "<h3 class='text-xl font-bold mb-2 mr-60'>" . htmlspecialchars($row['title']) . "</h3>";
-    echo "<button class='bg-green-700 text-white rounded-md px-2 mr-2 ml-10'>Edit</button>";
+    echo "<button class='bg-green-700 text-white rounded-md px-2 mr-2 ml-10'>
+    <a href='edit_article.php?id=" . $row['id'] . "'>Edit</a>
+  </button>";
 echo "<button class='bg-red-700 text-white rounded-md px-2'>
         <a href='delete_article.php?id=" . $row['id'] . "'>Delete</a>
       </button>";

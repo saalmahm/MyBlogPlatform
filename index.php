@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>car rental</title>
+    <title>blog</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -88,21 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <section class="bg-blue-200 py-4 relative">
         <div class="px-6 lg:right-2">           
         <div class="flex justify-between mb-4">
-<form method="GET" action="">
-                    <label for="category" class="block text-sm font-medium text-gray-700">Filtrer par catégorie :</label>
-                    <select id="category" name="category" class="ml-2 p-2 border border-gray-300 rounded-md">
-                        <?php
-                        $query = "SELECT * FROM tags";
-                        $result = mysqli_query($conn, $query);
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['name']) . "</option>";
-                        }
-                        ?>
-                    </select>
-                    <button type="submit" class="ml-2 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Filtrer</button>
-</form>
+ 
 
-    <button class="bg-blue-600 text-white p-2 py-0 rounded-md text-lg hover:bg-blue-700 " onclick="openModal()">Add an article</button>
+    <button class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">+ Add an article</button>
                 
 </div>        </div>
     </section>
@@ -178,20 +166,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           GROUP BY articles.id";
 $result = mysqli_query($conn, $query);
 
-while ($row = mysqli_fetch_assoc($result)) { 
-    echo "<div class='bg-gray-100 rounded-lg shadow-md p-4'>"; 
-    echo "<div class='flex'>";   
-    echo "<h3 class='text-xl font-bold mb-2 mr-60'>" . htmlspecialchars($row['title']) . "</h3>";
-    echo "</div>";                 
-    echo "<p class='text-gray-700 mb-4'>" . htmlspecialchars($row['content']) . "</p>";
-    echo "<img src='./uploads/" . htmlspecialchars($row['image']) . "' alt='Image de l\'article' class='w-full h-48 object-cover mb-4 rounded-lg'>"; 
-    echo "<p class='text-gray-600 text-sm'>Par " . htmlspecialchars($row['username']) . " le " . htmlspecialchars($row['created_at']) . "</p>";
-    if (!empty($row['tags'])) {
-        echo "<p class='text-blue-600 text-sm'>Tags : " . htmlspecialchars($row['tags']) . "</p>";
+if ($result && mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        // Variables protégées contre XSS
+        $title = htmlspecialchars($row['title']);
+        $content = htmlspecialchars($row['content']);
+        $image = htmlspecialchars($row['image']);
+        $username = htmlspecialchars($row['username']);
+        $created_at = htmlspecialchars($row['created_at']);
+        $tags = !empty($row['tags']) ? htmlspecialchars($row['tags']) : '';
+
+        // Affichage
+        ?>
+        <div class="bg-gray-100 rounded-lg shadow-md p-4">
+            <div class="flex justify-between">
+                <h3 class="text-xl font-bold mb-2"><?= $title; ?></h3>
+            </div>
+            <p class="text-gray-700 mb-4"><?= $content; ?></p>
+            <img src="./uploads/<?= $image; ?>" alt="Image de l'article" class="w-full h-48 object-cover mb-4 rounded-lg">
+            <p class="text-gray-600 text-sm">
+                Par <?= $username; ?> le <?= $created_at; ?>
+            </p>
+            <?php if (!empty($tags)): ?>
+                <p class="text-blue-600 text-sm">Tags : <?= $tags; ?></p>
+            <?php endif; ?>
+            <div class="flex space-x-4 mt-2">
+                <img src="./images/likees.png" alt="Like" class="w-6 h-6">
+                <img src="./images/comment.png" alt="Commentaire" class="w-6 h-6">
+            </div>
+        </div>
+        <?php
     }
-    echo "</div>"; 
+} else {
+    echo "<p>Aucun article trouvé.</p>";
 }
- ?> 
+?>
  </div>
  </div>
     <script>
