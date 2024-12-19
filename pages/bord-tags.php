@@ -43,17 +43,25 @@
             </ul>
         </div>
 </header>
+
 <div class="flex">
     <aside class="fixed top-0 left-0 w-64 bg-gray-800 text-gray-200 h-screen z-40">
         <div class="p-4 text-center">
             <h2 class="text-2xl font-bold text-white">Manage</h2>
         </div>
         <nav class="mt-6">
-            <a href="./bord-articles.php"><button class="block w-full px-4 py-2 text-sm hover:bg-blue-600 text-blue-300">Articles</button></a>
-            <button class="block w-full px-4 py-2 text-sm hover:bg-green-600 text-green-300">Users</button>
-            <a href="./bord-tags.php"><button id="categories-btn" class="block w-full px-4 py-2 text-sm hover:bg-purple-600 text-purple-300">Categories</button></a>
+            <a href="./bord-articles.php">
+                <button class="block w-full px-4 py-2 text-sm hover:bg-blue-600 text-blue-300">Articles</button>
+            </a>
+            <a href="./dashboard.php">
+                <button class="block w-full px-4 py-2 text-sm hover:bg-green-600 text-green-300">Users</button>
+            </a>
+            <a href="./bord-tags.php">
+                <button id="categories-btn" class="block w-full px-4 py-2 text-sm hover:bg-purple-600 text-purple-300">Categories</button>
+            </a>
         </nav>
     </aside>
 </div>
+
 </body>
 </html>
