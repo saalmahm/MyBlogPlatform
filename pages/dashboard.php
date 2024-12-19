@@ -55,43 +55,45 @@
         </nav>
     </aside>
     <main class="ml-64 p-4 w-full">
-<div class="flex justify-between">
-<h1 class="text-2xl font-bold mb-4">users</h1>
-        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+ Add</button>
-
-</div>
+        <div class="flex justify-between">
+            <h1 class="text-2xl font-bold mb-4">Users</h1>
+            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+ Add</button>
+        </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Product name</th>
-                        <th scope="col" class="px-6 py-3">Color</th>
-                        <th scope="col" class="px-6 py-3">Category</th>
-                        <th scope="col" class="px-6 py-3">Price</th>
+                        <th scope="col" class="px-6 py-3">Username</th>
+                        <th scope="col" class="px-6 py-3">Email</th>
+                        <th scope="col" class="px-6 py-3">Role</th>
                         <th scope="col" class="px-6 py-3">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Apple MacBook Pro 17"</th>
-                        <td class="px-6 py-4">Silver</td>
-                        <td class="px-6 py-4">Laptop</td>
-                        <td class="px-6 py-4">$2999</td>
-                        <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                        <a href="#" class="font-medium text-red-600 hover:underline">Delete</a>                        </td>
-                    </tr>
-                    <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Microsoft Surface Pro</th>
-                        <td class="px-6 py-4">White</td>
-                        <td class="px-6 py-4">Laptop PC</td>
-                        <td class="px-6 py-4">$1999</td>
-                        <td class="px-6 py-4">
-                            <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                            <a href="#" class="font-medium text-red-600 hover:underline">Delete</a>
+                    <?php
+                    include ("../includes/db.php");
 
-                        </td>
-                    </tr>
+                    $sql = "SELECT users.id, users.username, users.email, roles.name AS role_name 
+                            FROM users 
+                            JOIN roles ON users.role_id = roles.id";
+                    $result = mysqli_query($conn, $sql);
+
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo '<tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">';
+                            echo '<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">' . $row['username'] . '</td>';
+                            echo '<td class="px-6 py-4">' . $row['email'] . '</td>';
+                            echo '<td class="px-6 py-4">' . $row['role_name'] . '</td>';
+                            echo '<td class="px-6 py-4">';
+                            echo '<a href="#" class="font-medium text-blue-600 hover:underline">Edit</a> ';
+                            echo '<a href="#" class="font-medium text-red-600 hover:underline">Delete</a>';
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                    } else {
+                        echo '<tr><td colspan="4" class="text-center px-6 py-4">No users found</td></tr>';
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
