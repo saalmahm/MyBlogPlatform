@@ -1,3 +1,38 @@
+<?php
+include("../includes/db.php");
+
+if (isset($_GET['delete_user_id'])) {
+    $user_id = $_GET['delete_user_id'];
+
+    if ($conn === null) {
+        die("La connexion à la base de données a échoué.");
+    }
+
+    $sql = "DELETE FROM likes WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+
+    $sql = "DELETE FROM comments WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+
+    $sql = "DELETE FROM articles WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+
+    $sql = "DELETE FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+
+    echo "Utilisateur et toutes ses données ont été supprimés avec succès.";
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,7 +121,7 @@
                             echo '<td class="px-6 py-4">' . $row['role_name'] . '</td>';
                             echo '<td class="px-6 py-4">';
                             echo '<a href="#" class="font-medium text-blue-600 hover:underline">Edit</a> ';
-                            echo '<a href="#" class="font-medium text-red-600 hover:underline">Delete</a>';
+                            echo '<a href="?delete_user_id=' . $row['id'] . '" class="font-medium text-red-600 hover:underline">Delete</a>';
                             echo '</td>';
                             echo '</tr>';
                         }
