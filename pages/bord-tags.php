@@ -1,3 +1,24 @@
+<?php
+include("../includes/db.php");
+
+if (isset($_GET['delete_tag_id'])) {
+    $tag_id = $_GET['delete_tag_id'];
+
+    if ($conn === null) {
+        die("La connexion à la base de données a échoué.");
+    }
+
+    $sql = "DELETE FROM article_tags WHERE tag_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $tag_id);
+    $stmt->execute();
+
+    $sql = "DELETE FROM tags WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $tag_id);
+    $stmt->execute();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -63,16 +84,19 @@
         </nav>
     </aside>
 </div>
-<main class="ml-64 p-4 w-full">
-        <div class="flex justify-between">
+<main class="ml-64 p-4 ">
+       <div class="flex justify-between flex-wrap mb-2">
             <h1 class="text-2xl font-bold mb-4">Tags</h1>
-        </div>
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <button type="button" id="add-tag" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-full text-sm px-5 py-2">
+            Add +
+        </button>        </div>
+        <div class="relative overflow-auto shadow-md sm:rounded-lg">
+        <table class="w-full table-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Tags</th>
-                        <th scope="col" class="px-6 py-3">Action</th>
+                    <th scope="col" class="px-4 py-2 w-1/2">Tags</th>
+                    <th scope="col" class="px-4 py-2 w-1/2">Action</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -101,5 +125,35 @@
             </table>
         </div>
     </main>
+    <div id="form-container" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" method="post">
+    <form action="" method="post" class="bg-white rounded-lg shadow-lg p-8 w-1/3">
+        <h2 class="text-xl font-bold mb-4">Ajouter un Tag</h2>
+        <label for="tag-name" class="block text-sm font-medium text-gray-700">Nom du Tag</label>
+        <input type="text" id="tag-name" name="tag_name" placeholder="Entrez le tag" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm mb-4">
+        <div class="flex justify-end">
+            <button type="button" id="close-form" class="text-gray-700 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md mr-2">
+                Annuler
+            </button>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-md">
+                Ajouter
+            </button>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    const addTag = document.getElementById("add-tag");
+    const formContainer = document.getElementById("form-container");
+    const closeForm = document.getElementById("close-form");
+
+    addTag.addEventListener("click", () => {
+        formContainer.classList.remove("hidden");
+    });
+
+    closeForm.addEventListener("click", () => {
+        formContainer.classList.add("hidden");
+    });
+</script>
 </body>
 </html>

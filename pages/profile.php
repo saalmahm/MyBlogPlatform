@@ -220,7 +220,7 @@ echo "<button class='bg-red-700 text-white rounded-md px-2'>
             const modal = document.getElementById('modal');
             modal.classList.add('hidden');
         }
-
+  
 </script>
 </body>
 </html>
