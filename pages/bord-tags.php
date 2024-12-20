@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,11 +58,48 @@
                 <button class="block w-full px-4 py-2 text-sm hover:bg-green-600 text-green-300">Users</button>
             </a>
             <a href="./bord-tags.php">
-                <button id="categories-btn" class="block w-full px-4 py-2 text-sm hover:bg-purple-600 text-purple-300">Categories</button>
+                <button id="categories-btn" class="block w-full px-4 py-2 text-sm hover:bg-purple-600 text-purple-300">Tags</button>
             </a>
         </nav>
     </aside>
 </div>
+<main class="ml-64 p-4 w-full">
+        <div class="flex justify-between">
+            <h1 class="text-2xl font-bold mb-4">Tags</h1>
+        </div>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Tags</th>
+                        <th scope="col" class="px-6 py-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    include ("../includes/db.php");
 
+                    $sql = "SELECT * 
+                            FROM tags ";
+                    $result = mysqli_query($conn, $sql);
+
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo '<tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">';
+                            echo '<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">' . $row['name'] . '</td>';
+                            echo '<td class="px-6 py-4 flex text-center">';
+                            echo '<a href="#" class="font-medium text-blue-600 hover:underline pr-6">Edit</a> ';
+                            echo '<a href="?delete_tag_id=' . $row['id'] . '" class="font-medium text-red-600 hover:underline">Delete</a>';
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                    } else {
+                        echo '<tr><td colspan="4" class="text-center px-6 py-4">No users found</td></tr>';
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </main>
 </body>
 </html>

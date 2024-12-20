@@ -86,13 +86,12 @@ if (isset($_GET['delete_user_id'])) {
         <nav class="mt-6">
             <a href="./bord-articles.php"><button class="block w-full px-4 py-2 text-sm hover:bg-blue-600 text-blue-300">Articles</button></a>
             <button class="block w-full px-4 py-2 text-sm hover:bg-green-600 text-green-300">Users</button>
-            <a href="./bord-tags.php"><button id="categories-btn" class="block w-full px-4 py-2 text-sm hover:bg-purple-600 text-purple-300">Categories</button></a>
+            <a href="./bord-tags.php"><button id="categories-btn" class="block w-full px-4 py-2 text-sm hover:bg-purple-600 text-purple-300">Tags</button></a>
         </nav>
     </aside>
     <main class="ml-64 p-4 w-full">
         <div class="flex justify-between">
             <h1 class="text-2xl font-bold mb-4">Users</h1>
-            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+ Add</button>
         </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
