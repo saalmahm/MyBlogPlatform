@@ -22,9 +22,9 @@ if (isset($_GET['delete_tag_id'])) {
 if($_SERVER["REQUEST_METHOD"]=="POST"){
     $tagNam=$_POST['tag_name'];
     $sql="insert into tags (name) values (?)";
-    $stml=$conn->prepare($sql);
-    $stml->bind_param("s", $tagNam);
-    $stml->execute();
+    $stmt=$conn->prepare($sql);
+    $stmt->bind_param("s", $tagNam);
+    $stmt->execute();
 }
 ?>
 
@@ -120,7 +120,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                             echo '<tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">';
                             echo '<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">' . $row['name'] . '</td>';
                             echo '<td class="px-6 py-4 flex text-center">';
-                            echo '<a href="#" class="font-medium text-blue-600 hover:underline pr-6">Edit</a> ';
+                            echo '<a href="edit-tag.php?edit_tag_id=' . $row['id'] . '" class="font-medium text-blue-600 hover:underline pr-6">Edit</a>';
                             echo '<a href="?delete_tag_id=' . $row['id'] . '" class="font-medium text-red-600 hover:underline">Delete</a>';
                             echo '</td>';
                             echo '</tr>';
@@ -134,7 +134,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         </div>
     </main>
     <div id="form-container" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" method="post">
-    <form action="" method="post" class="bg-white rounded-lg shadow-lg p-8 w-1/3">
+    <form class="bg-white rounded-lg shadow-lg p-8 w-1/3">
         <h2 class="text-xl font-bold mb-4">Ajouter un Tag</h2>
         <label for="tag-name" class="block text-sm font-medium text-gray-700">Nom du Tag</label>
         <input type="text" id="tag-name" name="tag_name" placeholder="Entrez le tag" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm mb-4">
