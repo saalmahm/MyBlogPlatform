@@ -89,6 +89,8 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
             <a href="./bord-tags.php">
                 <button id="categories-btn" class="block w-full px-4 py-2 text-sm hover:bg-purple-600 text-purple-300">Tags</button>
             </a>
+            <a href="statistiques.php"><button class="block w-full px-4 py-2 text-sm hover:bg-yellow-600 text-yellow-300">Statistics</button></a>
+
         </nav>
     </aside>
 </div>

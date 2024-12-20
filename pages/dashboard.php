@@ -87,6 +87,7 @@ if (isset($_GET['delete_user_id'])) {
             <a href="./bord-articles.php"><button class="block w-full px-4 py-2 text-sm hover:bg-blue-600 text-blue-300">Articles</button></a>
             <button class="block w-full px-4 py-2 text-sm hover:bg-green-600 text-green-300">Users</button>
             <a href="./bord-tags.php"><button id="categories-btn" class="block w-full px-4 py-2 text-sm hover:bg-purple-600 text-purple-300">Tags</button></a>
+            <a href="statistiques.php"><button class="block w-full px-4 py-2 text-sm hover:bg-yellow-600 text-yellow-300">Statistics</button></a>
         </nav>
     </aside>
     <main class="ml-64 p-4 w-full">
@@ -119,7 +120,7 @@ if (isset($_GET['delete_user_id'])) {
                             echo '<td class="px-6 py-4">' . $row['email'] . '</td>';
                             echo '<td class="px-6 py-4">' . $row['role_name'] . '</td>';
                             echo '<td class="px-6 py-4">';
-                            echo '<a href="edit-user.php?edit_user_id=' . $row['id'] . '" class="font-medium text-blue-600 hover:underline">Edit</a>';
+                            echo '<a href="edit-user.php?edit_user_id=' . $row['id'] . '" class="font-medium text-blue-600 hover:underline pr-4">Edit</a>';
                             echo '<a href="?delete_user_id=' . $row['id'] . '" class="font-medium text-red-600 hover:underline">Delete</a>';
                             echo '</td>';
                             echo '</tr>';
