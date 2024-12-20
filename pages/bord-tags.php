@@ -18,6 +18,14 @@ if (isset($_GET['delete_tag_id'])) {
     $stmt->bind_param("i", $tag_id);
     $stmt->execute();
 }
+
+if($_SERVER["REQUEST_METHOD"]=="POST"){
+    $tagNam=$_POST['tag_name'];
+    $sql="insert into tags (name) values (?)";
+    $stml=$conn->prepare($sql);
+    $stml->bind_param("s", $tagNam);
+    $stml->execute();
+}
 ?>
 
 <!DOCTYPE html>
