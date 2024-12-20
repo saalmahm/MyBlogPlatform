@@ -119,7 +119,7 @@ if (isset($_GET['delete_user_id'])) {
                             echo '<td class="px-6 py-4">' . $row['email'] . '</td>';
                             echo '<td class="px-6 py-4">' . $row['role_name'] . '</td>';
                             echo '<td class="px-6 py-4">';
-                            echo '<a href="#" class="font-medium text-blue-600 hover:underline">Edit</a> ';
+                            echo '<a href="edit-user.php?edit_user_id=' . $row['id'] . '" class="font-medium text-blue-600 hover:underline">Edit</a>';
                             echo '<a href="?delete_user_id=' . $row['id'] . '" class="font-medium text-red-600 hover:underline">Delete</a>';
                             echo '</td>';
                             echo '</tr>';
