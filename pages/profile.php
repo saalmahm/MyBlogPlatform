@@ -2,6 +2,7 @@
 include('../includes/db.php');
 session_start();
 $userLoggedIn = isset($_SESSION['user_id']); 
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = $_POST['title'];
     $content = $_POST['content'];
@@ -36,6 +37,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } else {
         echo "Aucune image téléchargée ou erreur lors du téléchargement.";
+    }
+}
+
+if ($userLoggedIn && isset($_GET['like'])) {
+    $article_id = $_GET['like'];
+    $user_id = $_SESSION['user_id'];
+    
+    // Vérifie si l'user deja aimer ce article
+    $checkLikeQuery = "SELECT * FROM likes WHERE user_id = $user_id AND article_id = $article_id";
+    $checkLikeResult = mysqli_query($conn, $checkLikeQuery);
+
+    if (mysqli_num_rows($checkLikeResult) == 0) {
+        // ajouter like si l'ser na pas encore aimer
+        $likeQuery = "INSERT INTO likes (user_id, article_id) VALUES ($user_id, $article_id)";
+        mysqli_query($conn, $likeQuery);
+    } else {
+        // supprimer like si l'iser deja liker
+        $unlikeQuery = "DELETE FROM likes WHERE user_id = $user_id AND article_id = $article_id";
+        mysqli_query($conn, $unlikeQuery);
     }
 }
 ?>
@@ -173,11 +193,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
  </div>
 <section>
     <div class="container mx-auto px-4 mt-10"> 
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Articles que tu as crée</h2> 
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
              <?php 
               $user_id = $_SESSION['user_id'];
-            $query = "
-            SELECT articles.*, 
+            $query = "SELECT articles.*, 
                    users.username, 
                    GROUP_CONCAT(tags.name SEPARATOR ', ') AS tags 
             FROM articles
