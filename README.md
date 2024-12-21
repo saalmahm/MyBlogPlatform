@@ -29,6 +29,7 @@ Ce projet consiste à développer une plateforme de blog où les utilisateurs pe
 
 ### Technologies utilisées ⚙️
 
+- **Frontend** : HTML and Tailwind Css
 - **Backend** : PHP 
 - **Base de données** : MySQL
 - **Contrôle de version** : Git
