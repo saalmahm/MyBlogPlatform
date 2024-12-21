@@ -4,21 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>blog</title>
+    <title>Blog</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
 <?php
 include('./includes/db.php');
-
 session_start();
 $userLoggedIn = isset($_SESSION['user_id']); 
 
+if ($userLoggedIn && isset($_GET['like'])) {
+    $article_id = $_GET['like'];
+    $user_id = $_SESSION['user_id'];
+    
+    // Vérifie si l'user deja aimer ce article
+    $checkLikeQuery = "SELECT * FROM likes WHERE user_id = $user_id AND article_id = $article_id";
+    $checkLikeResult = mysqli_query($conn, $checkLikeQuery);
+
+    if (mysqli_num_rows($checkLikeResult) == 0) {
+        // ajouter like si l'ser na pas encore aimer
+        $likeQuery = "INSERT INTO likes (user_id, article_id) VALUES ($user_id, $article_id)";
+        mysqli_query($conn, $likeQuery);
+    } else {
+        // supprimer like si l'iser deja liker
+        $unlikeQuery = "DELETE FROM likes WHERE user_id = $user_id AND article_id = $article_id";
+        mysqli_query($conn, $unlikeQuery);
+    }
+}
 ?>
 <header class="flex justify-between p-4">
     <a href="/index.php" id="cars">
-        <img src="images/cars.gif" alt="">
+        <img src="images/cars.gif" alt="Logo">
     </a>
     <div class="lg:hidden" id="burger-icon">
         <img src="images/menu.png" alt="Menu">
@@ -66,89 +83,86 @@ $userLoggedIn = isset($_SESSION['user_id']);
         </ul>
     </div>
 </header>
- <section class="bg-white py-8"> 
+
+<section class="bg-white py-8"> 
     <div class="container mx-auto px-4"> 
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Articles Disponibles</h2> 
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
              <?php 
-             $query = "SELECT articles.*, users.username, GROUP_CONCAT(tags.name SEPARATOR ', ') AS tags 
-          FROM articles
-          JOIN users ON articles.user_id = users.id
-          LEFT JOIN article_tags ON articles.id = article_tags.article_id
-          LEFT JOIN tags ON article_tags.tag_id = tags.id
-          GROUP BY articles.id";
-$result = mysqli_query($conn, $query);
+             $query = "SELECT articles.*, users.username, GROUP_CONCAT(tags.name SEPARATOR ', ') AS tags, 
+                            (SELECT COUNT(*) FROM likes WHERE article_id = articles.id) AS like_count
+                        FROM articles
+                        JOIN users ON articles.user_id = users.id
+                        LEFT JOIN article_tags ON articles.id = article_tags.article_id
+                        LEFT JOIN tags ON article_tags.tag_id = tags.id
+                        GROUP BY articles.id";
+             $result = mysqli_query($conn, $query);
 
-if ($result && mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        // Variables protégées contre XSS
-        $title = htmlspecialchars($row['title']);
-        $content = htmlspecialchars($row['content']);
-        $image = htmlspecialchars($row['image']);
-        $username = htmlspecialchars($row['username']);
-        $created_at = htmlspecialchars($row['created_at']);
-        $tags = !empty($row['tags']) ? htmlspecialchars($row['tags']) : '';
+             if ($result && mysqli_num_rows($result) > 0) {
+                 while ($row = mysqli_fetch_assoc($result)) {
+                     // Variables protégées contre XSS
+                     $title = htmlspecialchars($row['title']);
+                     $content = htmlspecialchars($row['content']);
+                     $image = htmlspecialchars($row['image']);
+                     $username = htmlspecialchars($row['username']);
+                     $created_at = htmlspecialchars($row['created_at']);
+                     $tags = !empty($row['tags']) ? htmlspecialchars($row['tags']) : '';
+                     $like_count = $row['like_count'];
+                     
+                     // Affichage
+             ?>
+                    <div class="bg-gray-100 rounded-lg shadow-md p-4">
+                        <div class="flex justify-between">
+                            <h3 class="text-xl font-bold mb-2"><?= $title; ?></h3>
+                        </div>
+                        <p class="text-gray-700 mb-4"><?= $content; ?></p>
+                        <img src="./uploads/<?= $image; ?>" alt="Image de l'article" class="w-full h-48 object-cover mb-4 rounded-lg">
+                        <p class="text-gray-600 text-sm">
+                            Par <?= $username; ?> le <?= $created_at; ?>
+                        </p>
+                        <?php if (!empty($tags)): ?>
+                            <p class="text-gray-600 text-sm">Tags : <?= $tags; ?></p>
+                        <?php endif; ?>
+                        <p class="text-blue-600 text-sm underline">
+                            <a href="./pages/comments.php?article_id=<?= $row['id']; ?>">View all comments</a>
+                        </p>
+                        <p class="text-gray-600 text-sm">Likes: <?= $like_count; ?></p>
 
-        // Affichage
-        ?>
-        <div class="bg-gray-100 rounded-lg shadow-md p-4">
-            <div class="flex justify-between">
-                <h3 class="text-xl font-bold mb-2"><?= $title; ?></h3>
-            </div>
-            <p class="text-gray-700 mb-4"><?= $content; ?></p>
-            <img src="./uploads/<?= $image; ?>" alt="Image de l'article" class="w-full h-48 object-cover mb-4 rounded-lg">
-            <p class="text-gray-600 text-sm">
-                Par <?= $username; ?> le <?= $created_at; ?>
-            </p>
-            <?php if (!empty($tags)): ?>
-                <p class="text-gray-600 text-sm">Tags : <?= $tags; ?></p>
-            <?php endif; ?>
-            <p class="text-blue-600 text-sm underline">
-            <a href="./pages/comments.php?article_id=<?= $row['id']; ?>">View all comment</a>
-            </p>
-            <div class="flex justify-between mt-4">
-            <button type="button" class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
-            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-            <path d="M3 7H1a1 1 0 0 0-1 1v8a2 2 0 0 0 4 0V8a1 1 0 0 0-1-1Zm12.954 0H12l1.558-4.5a1.778 1.778 0 0 0-3.331-1.06A24.859 24.859 0 0 1 6 6.8v9.586h.114C8.223 16.969 11.015 18 13.6 18c1.4 0 1.592-.526 1.88-1.317l2.354-7A2 2 0 0 0 15.954 7Z"/>
-            </svg>
-            <span class="sr-only">Icon description</span>
-            </button>           
-            <button type="submit"
-                class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                <a href="./pages/add_comment.php?article_id=<?= $row['id']; ?>">Post comment</a>            </button>      
+                        <div class="flex justify-between mt-4">
+                            <a href="?like=<?= $row['id']; ?>" class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
+                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                                    <path d="M3 7H1a1 1 0 0 0-1 1v8a2 2 0 0 0 4 0V8a1 1 0 0 0-1-1Zm12.954 0H12l1.558-4.5a1.778 1.778 0 0 0-3.331-1.06A24.859 24.859 0 0 1 6 6.8v9.586h.114C8.223 16.969 11.015 18 13.6 18c1.4 0 1.592-.526 1.88-1.317l2.354-7A2 2 0 0 0 15.954 7Z"/>
+                                </svg>
+                            </a>
+                            <a href="./pages/add_comment.php?article_id=<?= $row['id']; ?>" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+                                Post comment
+                            </a>  
+                        </div>
+                    </div>
+                <?php
+                }
+            } else {
+                echo "<p>Aucun article trouvé.</p>";
+            }
+            ?>
         </div>
-        </div>
-        <?php
-    }
-} else {
-    echo "<p>Aucun article trouvé.</p>";
-}
-?>
- </div>
-    <script>
+    </div>
+</section>
 
-        const menu = document.getElementById("burger-icon");
-        const sidebar = document.getElementById("sidebar");
-        const closeSidebar = document.getElementById("close-sidebar");
+<script>
+    const menu = document.getElementById("burger-icon");
+    const sidebar = document.getElementById("sidebar");
+    const closeSidebar = document.getElementById("close-sidebar");
 
-        menu.addEventListener("click", () => {
-            sidebar.classList.remove("translate-x-full");  
-            sidebar.classList.add("translate-x-0");
-        });
+    menu.addEventListener("click", () => {
+        sidebar.classList.remove("translate-x-full");  
+        sidebar.classList.add("translate-x-0");
+    });
 
-        closeSidebar.addEventListener("click", () => {
-            sidebar.classList.add("translate-x-full");    
-            sidebar.classList.remove("translate-x-0");   
-        });
-        function openModal() {
-        const modal = document.getElementById('modal');
-        modal.classList.remove('hidden');
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('modal');
-        modal.classList.add('hidden');
-    }
-    </script>
+    closeSidebar.addEventListener("click", () => {
+        sidebar.classList.add("translate-x-full");    
+        sidebar.classList.remove("translate-x-0");   
+    });
+</script>
 </body>
 </html>
