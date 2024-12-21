@@ -58,6 +58,19 @@ if ($userLoggedIn && isset($_GET['like'])) {
         mysqli_query($conn, $unlikeQuery);
     }
 }
+
+if ($userLoggedIn) {
+    $userId = $_SESSION['user_id'];
+
+    $sql = "SELECT role_id FROM users WHERE id = $userId";
+    $result = $conn->query($sql);
+    $role = null;
+    
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $role = $row['role_id']; 
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -86,8 +99,12 @@ if ($userLoggedIn && isset($_GET['like'])) {
             <a href="/home.php" class="text-black text-lg">Home</a>
             <a href="/index.php" class="text-black text-lg">Blog</a>
             <?php if ($userLoggedIn): ?>
-                <a href="/pages/profile.php" class="text-black text-lg">Profile</a>
-                <a href="/pages/dashboard.php" class="text-black text-lg">Dashboard</a>
+                <?php if ($role == 1): ?> <!-- Admin role -->
+                    <a href="/pages/dashboard.php" class="text-black text-lg">Dashboard</a>
+                <?php endif; ?>
+                <?php if ($role == 2): ?> <!-- User role -->
+                    <a href="/pages/profile.php" class="text-black text-lg">Profile</a>
+                <?php endif; ?>
                 <a href="/pages/logout.php" class="text-red-500 text-lg">Log out</a>
             <?php else: ?>
                 <a href="/pages/signup.php" class="text-blue-500 text-lg">Sign Up</a>
@@ -103,12 +120,16 @@ if ($userLoggedIn && isset($_GET['like'])) {
                 <a href="/index.php" class="hover:underline me-4 md:me-6">Blog</a>
             </li>
             <?php if ($userLoggedIn): ?>
-                <li>
-                    <a href="/pages/profile.php" class="hover:underline me-4 md:me-6">Profile</a>
-                </li>
-                <li>
-                    <a href="/pages/dashboard.php" class="hover:underline me-4 md:me-6">Dashboard</a>
-                </li>
+                <?php if ($role == 1): ?> <!-- Admin role -->
+                    <li>
+                        <a href="/pages/dashboard.php" class="hover:underline me-4 md:me-6">Dashboard</a>
+                    </li>
+                <?php endif; ?>
+                <?php if ($role == 2): ?> <!-- User role -->
+                    <li>
+                        <a href="/pages/profile.php" class="hover:underline me-4 md:me-6">Profile</a>
+                    </li>
+                <?php endif; ?>
                 <li>
                     <a href="/pages/logout.php" class="text-red-500 hover:underline me-4 md:me-6">Log out</a>
                 </li>
