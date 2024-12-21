@@ -11,148 +11,61 @@
 <body>
 <?php
 include('./includes/db.php');
+
 session_start();
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $title = $_POST['title'];
-    $content = $_POST['content'];
-    $user_id = $_SESSION['user_id'];
-    $tags = $_POST['tags']; 
+$userLoggedIn = isset($_SESSION['user_id']); 
 
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $image = $_FILES['image']['name'];
-        $target_dir = './uploads/';
-        $target_file = $target_dir . basename($image);
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $target_file)) {
-            $query = "INSERT INTO articles (title, content, image, user_id) VALUES (?, ?, ?, ?)";
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("sssi", $title, $content, $image, $user_id);
-
-            if ($stmt->execute()) {
-                $article_id = $stmt->insert_id;
-
-                $tag_query = "INSERT INTO article_tags (article_id, tag_id) VALUES (?, ?)";
-                $tag_stmt = $conn->prepare($tag_query);
-
-                foreach ($tags as $tag_id) {
-                    $tag_stmt->bind_param("ii", $article_id, $tag_id);
-                    $tag_stmt->execute();
-                }
-
-            } else {
-                echo "Erreur : " . $stmt->error;
-            }
-        } else {
-            echo "Erreur lors du téléchargement de l'image.";
-        }
-    } else {
-        echo "Aucune image téléchargée ou erreur lors du téléchargement.";
-    }
-}
 ?>
-    <header class="flex justify-between p-4">
-        <a href="/index.php" id="cars">
-            <img src="images/cars.gif" alt="">
-        </a>
-        <div class="lg:hidden" id="burger-icon">
-            <img src="images/menu.png" alt="Menu">
+<header class="flex justify-between p-4">
+    <a href="/index.php" id="cars">
+        <img src="images/cars.gif" alt="">
+    </a>
+    <div class="lg:hidden" id="burger-icon">
+        <img src="images/menu.png" alt="Menu">
+    </div>
+    <div id="sidebar"
+        class="shadow-xl fixed top-0 right-0 w-1/3 h-full bg-gray-200 z-50 transform translate-x-full duration-300">
+        <div class="flex justify-end p-4">
+            <button id="close-sidebar" class="text-3xl">X</button>
         </div>
-        <div id="sidebar"
-            class="shadow-xl fixed top-0 right-0 w-1/3 h-full bg-gray-200  z-50 transform translate-x-full duration-300 ">
-            <div class="flex justify-end p-4">
-                <button id="close-sidebar" class=" text-3xl">X</button>
-            </div>
-            <div class="flex flex-col items-center space-y-4 text-white">
-                <a href="index.php" class="text-black text-lg">Blog</a>
+        <div class="flex flex-col items-center space-y-4 text-white">
+            <a href="home.php" class="text-black text-lg">Home</a>
+            <a href="index.php" class="text-black text-lg">Blog</a>
+            <?php if ($userLoggedIn): ?>
                 <a href="/pages/profile.php" class="text-black text-lg">Profile</a>
-                <a href=""  class="text-black text-lg">Dashboard</a>
-                <a href="/pages/clients.php" class="text-red-500 text-lg">Log out</a>
-            </div>
+                <a href="/pages/dashboard.php" class="text-black text-lg">Dashboard</a>
+                <a href="/pages/logout.php" class="text-red-500 text-lg">Log out</a>
+            <?php else: ?>
+                <a href="/pages/signup.php" class="text-blue-500 text-lg">Sign Up</a>
+            <?php endif; ?>
         </div>
-        <div class="hidden lg:flex justify-center space-x-4">
-            <ul class="flex items-center text-sm font-medium text-gray-400 mb-0 ">
-                <li>
-                    <a href="index.php" class="hover:underline me-4 md:me-6">Blog</a>
-                </li>
+    </div>
+    <div class="hidden lg:flex justify-center space-x-4">
+        <ul class="flex items-center text-sm font-medium text-gray-400 mb-0">
+            <li>
+                <a href="home.php" class="hover:underline me-4 md:me-6">Home</a>
+            </li>
+            <li>
+                <a href="index.php" class="hover:underline me-4 md:me-6">Blog</a>
+            </li>
+            <?php if ($userLoggedIn): ?>
                 <li>
                     <a href="/pages/profile.php" class="hover:underline me-4 md:me-6">Profile</a>
                 </li>
                 <li>
-                    <a href="/pages/profile.php" class="hover:underline me-4 md:me-6">Dashboard</a>
+                    <a href="/pages/dashboard.php" class="hover:underline me-4 md:me-6">Dashboard</a>
                 </li>
                 <li>
                     <a href="/pages/logout.php" class="text-red-500 hover:underline me-4 md:me-6">Log out</a>
                 </li>
-            </ul>
-        </div>
-    </header>
-    <section class="bg-blue-200 py-4 relative">
-        <div class="px-6 lg:right-2">           
-        <div class="flex justify-between mb-4">
- 
-
-    <button class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">+ Add an article</button>
-                
-</div>        </div>
-    </section>
-
-    <div id="modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">​</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                Add an Article
-                            </h3>
-                            <div class="mt-2">
-                            <form id="articleForm" method="POST" enctype="multipart/form-data">
-    <div class="mb-4">
-        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-        <input type="text" id="title" name="title" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" required>
+            <?php else: ?>
+                <li>
+                    <a href="/pages/signup.php" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 me-4 md:me-6">Sign Up</a>
+                </li>
+            <?php endif; ?>
+        </ul>
     </div>
-    <div class="mb-4">
-        <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
-        <textarea id="content" name="content" rows="4" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" required></textarea>
-    </div>
-    <div class="mb-4">
-        <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
-        <input type="file" id="image" name="image" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" required>
-    </div>
-    <div class="mb-4">
-        <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
-        <select id="tags" name="tags[]" multiple class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-            <?php
-            $query = "SELECT * FROM tags";
-            $result = mysqli_query($conn, $query);
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['name']) . "</option>";
-            }
-            ?>
-        </select>
-        <small class="text-gray-500">Hold Ctrl (or Command on Mac) to select multiple tags.</small>
-    </div>
-    <div class="sm:flex sm:items-center">
-        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm">
-            Add Article
-        </button>
-        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal()">
-            Cancel
-        </button>
-    </div>
-</form>
-
-
-</div>
-</div>
- </div>
-</div>
- </div>
- </div>
- </div>
+</header>
  <section class="bg-white py-8"> 
     <div class="container mx-auto px-4"> 
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Articles Disponibles</h2> 
@@ -188,12 +101,23 @@ if ($result && mysqli_num_rows($result) > 0) {
                 Par <?= $username; ?> le <?= $created_at; ?>
             </p>
             <?php if (!empty($tags)): ?>
-                <p class="text-blue-600 text-sm">Tags : <?= $tags; ?></p>
+                <p class="text-gray-600 text-sm">Tags : <?= $tags; ?></p>
             <?php endif; ?>
-            <div class="flex space-x-4 mt-2">
-                <img src="./images/likees.png" alt="Like" class="w-6 h-6">
-                <img src="./images/comment.png" alt="Commentaire" class="w-6 h-6">
-            </div>
+            <p class="text-blue-600 text-sm underline">
+                <a href="">view all comment</a>
+            </p>
+            <div class="flex justify-between mt-4">
+            <button type="button" class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
+<svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+<path d="M3 7H1a1 1 0 0 0-1 1v8a2 2 0 0 0 4 0V8a1 1 0 0 0-1-1Zm12.954 0H12l1.558-4.5a1.778 1.778 0 0 0-3.331-1.06A24.859 24.859 0 0 1 6 6.8v9.586h.114C8.223 16.969 11.015 18 13.6 18c1.4 0 1.592-.526 1.88-1.317l2.354-7A2 2 0 0 0 15.954 7Z"/>
+</svg>
+<span class="sr-only">Icon description</span>
+</button>           
+<button type="submit"
+            class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
+            Post comment
+        </button>      
+          </div>
         </div>
         <?php
     }
