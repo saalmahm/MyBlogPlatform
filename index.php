@@ -46,11 +46,11 @@ if ($userLoggedIn) {
     }
 }
 ?>
-<header class="flex justify-between p-4">
-<a href="/home.php" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
-                <img src="/images/icon.png" class="h-8" alt="Flowbite Logo" />
-                <span class="text-2xl font-bold whitespace-nowrap  dark:text-gray-500"> MyBlogPlatform</span>
-            </a>
+<header class="flex justify-between p-4 fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+    <a href="/home.php" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+        <img src="/images/icon.png" class="h-8" alt="Flowbite Logo" />
+        <span class="text-2xl font-bold whitespace-nowrap dark:text-gray-500"> MyBlogPlatform</span>
+    </a>
     <div class="lg:hidden" id="burger-icon">
         <img src="images/menu.png" alt="Menu">
     </div>
@@ -63,11 +63,9 @@ if ($userLoggedIn) {
             <a href="index.php" class="text-black text-lg">Blog</a>
             <?php if ($userLoggedIn): ?>
                 <?php if ($role == 1): ?>
-                    <!-- Admin, n'affiche pas Dashboard -->
                     <a href="/pages/dashboard.php" class="text-black text-lg">Dashboard</a>
                 <?php endif; ?>
                 <?php if ($role == 2): ?>
-                    <!-- User, n'affiche pas Profile -->
                     <a href="/pages/profile.php" class="text-black text-lg">Profile</a>
                 <?php endif; ?>
                 <a href="/pages/logout.php" class="text-red-500 text-lg">Log out</a>
@@ -82,11 +80,9 @@ if ($userLoggedIn) {
             <li><a href="index.php" class="hover:underline me-4 md:me-6">Blog</a></li>
             <?php if ($userLoggedIn): ?>
                 <?php if ($role == 1): ?>
-                    <!-- Admin, n'affiche pas Dashboard -->
                     <li><a href="/pages/dashboard.php" class="hover:underline me-4 md:me-6">Dashboard</a></li>
                 <?php endif; ?>
                 <?php if ($role == 2): ?>
-                    <!-- User, n'affiche pas Profile -->
                     <li><a href="/pages/profile.php" class="hover:underline me-4 md:me-6">Profile</a></li>
                 <?php endif; ?>
                 <li><a href="/pages/logout.php" class="text-red-500 hover:underline me-4 md:me-6">Log out</a></li>
@@ -101,7 +97,7 @@ if ($userLoggedIn) {
 
 <section class="bg-white py-8"> 
     <div class="container mx-auto px-4"> 
-        <h2 class="text-3xl font-bold text-gray-800 mb-6">Articles Disponibles</h2> 
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 pt-20 text-center">Articles Disponibles</h2> 
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
              <?php 
              $query = "SELECT articles.*, users.username, GROUP_CONCAT(tags.name SEPARATOR ', ') AS tags, 

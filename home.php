@@ -83,21 +83,19 @@ include("./includes/db.php");
 
 <section class="bg-blue-600 text-white text-center py-20">
     <div class="container mx-auto px-4">
-        <h1 class="text-4xl font-bold">Welcome to My Blog</h1>
+        <h1 class="text-4xl font-bold pt-10">Welcome to My Blog</h1>
         <p class="mt-4 text-lg">Discover amazing articles and share your thoughts.</p>
         <a href="index.php" class="inline-block mt-6 bg-white text-blue-600 py-3 px-6 rounded-full font-semibold hover:bg-gray-200 transition">Explore Articles</a>
     </div>
 </section>
 
 
-<!-- Section About with Cards -->
 <section class="bg-gray-100 text-gray-900 py-16">
     <div class="container mx-auto px-4">
         <h2 class="text-3xl font-bold text-center">About Me</h2>
         <p class="mt-4 text-lg text-center">Hi, I'm Salma Hamdi, a passionate web developer. Here are some of the projects I've worked on:</p>
 
         <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Card 1: Todo List -->
             <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img src="images/todolist.jpg" alt="Todo List Project" class="w-full h-40 object-cover rounded-lg">
                 <h3 class="text-xl font-semibold mt-4">Todo List</h3>
@@ -105,7 +103,6 @@ include("./includes/db.php");
                 <a href="https://saalmahm.github.io/to-do-list/" class="mt-8 text-blue-600 hover:underline">View Project</a>
             </div>
 
-            <!-- Card 2: FUTeamBuilder -->
             <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img src="images/fifa.avif" alt="FUTeamBuilder Project" class="w-full h-40 object-cover rounded-lg">
                 <h3 class="text-xl font-semibold mt-4">FUTeamBuilder</h3>
@@ -113,7 +110,6 @@ include("./includes/db.php");
                 <a href="https://fu-team-builder.vercel.app/" class="mt-8 text-blue-600 hover:underline">View Project</a>
             </div>
 
-            <!-- Card 3: MyBlogPlatform -->
             <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img src="images/rent.jpg" alt="MyBlogPlatform Project" class="w-full h-40 object-cover rounded-lg">
                 <h3 class="text-xl font-semibold mt-4">CarRental</h3>
