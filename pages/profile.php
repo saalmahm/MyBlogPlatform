@@ -145,21 +145,26 @@ if ($userLoggedIn) {
         </ul>
     </div>
 </header>
-    <section class="bg-blue-200 py-4 relative flex justify-between mt-20">
-        <div class="flex justify-between">
-          <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-4"> 
-                <?php if (isset($_SESSION['username'])) {
-                    echo "Welcome " . htmlspecialchars($_SESSION['username'])." to your account ";
+<section class="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 py-8 relative flex justify-between items-center mt-20 rounded-lg shadow-lg">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full px-6">
+        <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-4 sm:mb-0">
+            <?php 
+                if (isset($_SESSION['username'])) {
+                    echo "Welcome, " . htmlspecialchars($_SESSION['username']) . "!";
                 } else { 
-                    echo "Welcome, Guest "; 
-                } ?> 
-            </h1>                      
-            <a href="manage_comments.php" class="text-blue-600">View or Manage Your Comments</a>
+                    echo "Welcome, Guest!"; 
+                } 
+            ?>
+        </h1>
 
-        </div>
-    </section>
+        <a href="manage_comments.php" class="mt-4 sm:mt-0 inline-block text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-6 py-2 font-medium text-lg hover:underline transition duration-300 ease-in-out shadow-md">
+            View or Manage Your Comments
+        </a>
+    </div>
+</section>
 
-    <div id="modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+
+    <div id="modal" class="fixed z-10 inset-0 overflow-y-auto hidden mt-6">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -222,15 +227,16 @@ if ($userLoggedIn) {
  </div>
 <section>
     <div class="container mx-auto px-4 mt-10"> 
-<div class="flex justify-between"> 
-       <h2 class="text-3xl font-bold text-gray-800 mb-6">Articles que tu as crée</h2> 
+<div class="flex  b-8">
+
     <button 
-  class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800" 
-  onclick="openModal()">
-  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-    + Add an article
-  </span>
-</button></div>
+    class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"        onclick="openModal()">
+        <span class="relative px-6 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            + Add an article
+        </span>
+    </button>
+</div>
+
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-10">
              <?php 
               $user_id = $_SESSION['user_id'];
