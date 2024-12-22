@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un commentaire</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
@@ -51,7 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="mb-4">
             <textarea name="content" rows="4" class="w-full p-2 border rounded-lg" placeholder="Votre commentaire..."></textarea>
         </div>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Ajouter</button>
+        <div class="sm:flex sm:items-center">
+        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+            Poster
+        </button>
+        <a href="home.php" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
+            Cancel
+        </a>
+    </div>
     </form>
 </div>
 </body>
