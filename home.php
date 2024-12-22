@@ -90,7 +90,7 @@ include("./includes/db.php");
 </section>
 
 
-<section class="bg-gray-100 text-gray-900 py-16">
+<section class="bg-gray-100 text-gray-900 py-16" id="about">
     <div class="container mx-auto px-4">
         <h2 class="text-3xl font-bold text-center">About Me</h2>
         <p class="mt-4 text-lg text-center">Hi, I'm Salma Hamdi, a passionate web developer. Here are some of the projects I've worked on:</p>
@@ -136,16 +136,13 @@ include("./includes/db.php");
             </a>
             <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
                 <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">Home</a>
+                    <a href="home.php" class="hover:underline me-4 md:me-6">Home</a>
                 </li>
                 <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">Blog</a>
+                    <a href="/index.php" class="hover:underline me-4 md:me-6">Blog</a>
                 </li>
                 <li>
-                    <a href="#" class="hover:underline me-4 md:me-6">Dashboard</a>
-                </li>
-                <li>
-                    <a href="#" class="hover:underline">Contact</a>
+                    <a href="#about" class="hover:underline">About</a>
                 </li>
             </ul>
         </div>
