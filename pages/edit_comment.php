@@ -45,15 +45,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <header class="flex justify-between p-4 bg-white shadow-md">
-    </header>
 
-    <section class="mt-10 px-6">
-        <h1 class="text-3xl font-bold">Edit Comment</h1>
-        <form method="POST">
-            <textarea name="content" class="w-full p-2 mt-4" rows="5"><?php echo htmlspecialchars($comment['content']); ?></textarea>
-            <button type="submit" class="mt-4 px-4 py-2 bg-blue-600 text-white">Save Changes</button>
+<section class="mt-10 px-6 flex justify-center">
+    <div class="w-full max-w-2xl p-6 bg-white border border-gray-300 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-gray-800 text-center">Edit Comment</h1>
+        <form method="POST" class="mt-6">
+            <div class="mb-4">
+                <label for="content" class="block text-sm font-medium text-gray-600">Your Comment</label>
+                <textarea id="content" name="content" class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent" rows="5"><?php echo htmlspecialchars($comment['content']); ?></textarea>
+            </div>
+            <div class="flex mt-6">
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mr-4">
+                    Save Changes
+                </button>
+                <button type="button" onclick="window.history.back();" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                    Cancel
+                </button>
+            </div>
         </form>
-    </section>
+    </div>
+</section>
+
+
+
 </body>
 </html>

@@ -29,8 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 <header class="flex justify-between p-4 fixed top-0 left-0 right-0 bg-white shadow-md z-50">
-    <a href="/index.php" id="cars">
-        <img src="images/cars.gif" alt="">
+<a href="/home.php" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+        <img src="/images/icon.png" class="h-8" alt="MyBlogPlatform Logo" />
+        <span class="text-2xl font-bold whitespace-nowrap dark:text-gray-500"> MyBlogPlatform</span>
     </a>
     <div class="lg:hidden" id="burger-icon">
         <img src="/images/menu.png" alt="Menu">
