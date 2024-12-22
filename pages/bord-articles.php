@@ -2,6 +2,11 @@
 session_start();
 $userLoggedIn = isset($_SESSION['user_id']); 
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php'); 
+    exit;
+}
+
 include("../includes/db.php");
 
 $sql = "SELECT articles.id, articles.title, articles.content, users.username 

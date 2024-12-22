@@ -3,6 +3,10 @@ include('../includes/db.php');
 session_start();
 $userLoggedIn = isset($_SESSION['user_id']); 
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php'); 
+    exit;
+}
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = $_POST['title'];
     $content = $_POST['content'];

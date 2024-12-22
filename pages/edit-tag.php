@@ -2,6 +2,13 @@
 
 include("../includes/db.php");
 
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php'); 
+    exit;
+}
+
 if (isset($_GET["edit_tag_id"])) {
     $tag_id = $_GET["edit_tag_id"];
     

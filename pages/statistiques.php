@@ -8,6 +8,11 @@ if ($conn === null) {
 session_start();
 $userLoggedIn = isset($_SESSION['user_id']); 
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php'); 
+    exit;
+}
+
 $sql_articles = "SELECT COUNT(*) AS total_articles FROM articles";
 $sql_users = "SELECT COUNT(*) AS total_users FROM users";
 $sql_tags = "SELECT COUNT(DISTINCT tag_id) AS total_tags FROM article_tags"; // Exemple si vous avez une table de liens entre articles et tags

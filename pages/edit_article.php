@@ -12,6 +12,11 @@
 include('../includes/db.php');
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php'); 
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['id'])) {
     $article_id = $_GET['id'];
 

@@ -6,10 +6,11 @@
     <title>Comments</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50">
 
 <?php
 include('../includes/db.php');
+
 
 if (isset($_GET['article_id'])) {
     $article_id = intval($_GET['article_id']);
@@ -23,7 +24,7 @@ if (isset($_GET['article_id'])) {
 
     // Vérifier si l'article existe
     if (!$article_result) {
-        echo "<p class='text-red-500'>Article introuvable.</p>";
+        echo "<p class='text-red-500 text-center mt-6'>Article introuvable.</p>";
         exit;
     }
 
@@ -38,29 +39,42 @@ if (isset($_GET['article_id'])) {
     $stmt->execute();
     $comments_result = $stmt->get_result();
 } else {
-    echo "<p class='text-red-500'>Aucun article sélectionné.</p>";
+    echo "<p class='text-red-500 text-center mt-6'>Aucun article sélectionné.</p>";
     exit;
 }
 ?>
 
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-4"><?= htmlspecialchars($article_result['title']); ?></h1>
-    <p class="text-gray-700 mb-6"><?= htmlspecialchars($article_result['content']); ?></p>
+<div class="max-w-4xl mx-auto px-6 py-8">
+    <!-- Article Section -->
+    <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4"><?= htmlspecialchars($article_result['title']); ?></h1>
+        <p class="text-gray-700 text-lg leading-relaxed"><?= nl2br(htmlspecialchars($article_result['content'])); ?></p>
+    </div>
 
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Commentaires</h2>
-    <?php if ($comments_result->num_rows > 0): ?>
-        <div class="space-y-4">
-            <?php while ($comment = $comments_result->fetch_assoc()): ?>
-                <div class="bg-white p-4 rounded-lg shadow">
-                    <p class="text-gray-800 font-semibold"><?= htmlspecialchars($comment['username']); ?></p>
-                    <p class="text-gray-700"><?= htmlspecialchars($comment['comment']); ?></p>
-                    <p class="text-gray-500 text-sm"><?= htmlspecialchars($comment['created_at']); ?></p>
-                </div>
-            <?php endwhile; ?>
-        </div>
-    <?php else: ?>
-        <p class="text-gray-500">Aucun commentaire pour cet article.</p>
-    <?php endif; ?>
+    <!-- Comments Section -->
+    <div>
+        <h2 class="text-3xl font-semibold text-gray-800 mb-4">Commentaires</h2>
+        <?php if ($comments_result->num_rows > 0): ?>
+            <div class="space-y-6">
+                <?php while ($comment = $comments_result->fetch_assoc()): ?>
+                    <div class="bg-white p-5 rounded-lg shadow flex items-start space-x-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-semibold">
+                                <?= strtoupper(substr(htmlspecialchars($comment['username']), 0, 1)); ?>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-gray-800 font-semibold"><?= htmlspecialchars($comment['username']); ?></p>
+                            <p class="text-gray-700 mt-1"><?= nl2br(htmlspecialchars($comment['comment'])); ?></p>
+                            <p class="text-gray-500 text-sm mt-2"><?= htmlspecialchars($comment['created_at']); ?></p>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            </div>
+        <?php else: ?>
+            <p class="text-gray-500 mt-4">Aucun commentaire pour cet article.</p>
+        <?php endif; ?>
+    </div>
 </div>
 
 </body>

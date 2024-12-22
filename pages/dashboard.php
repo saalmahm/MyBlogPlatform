@@ -4,6 +4,11 @@ include("../includes/db.php");
 session_start();
 $userLoggedIn = isset($_SESSION['user_id']); 
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php'); 
+    exit;
+}
+
 if (isset($_GET['delete_user_id'])) {
     $user_id = $_GET['delete_user_id'];
 
