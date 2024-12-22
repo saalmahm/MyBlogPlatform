@@ -145,12 +145,18 @@ if ($userLoggedIn) {
         <div class="px-6 lg:right-2">
           <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-4"> 
                 <?php if (isset($_SESSION['username'])) {
-                    echo "Welcome, " . htmlspecialchars($_SESSION['username']);
+                    echo "Welcome " . htmlspecialchars($_SESSION['username'])." to your account ";
                 } else { 
                     echo "Welcome, Guest "; 
                 } ?> 
             </h1>                      
-            <button class="inline-block bg-blue-600 text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-blue-700 transition-colors duration-300" onclick="openModal()">+ Add an article</button>
+            <button 
+  class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800" 
+  onclick="openModal()">
+  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+    + Add an article
+  </span>
+</button>
         </div>
     </section>
 
@@ -168,7 +174,7 @@ if ($userLoggedIn) {
                                 Add an Article
                             </h3>
                             <div class="mt-2">
-                            <form id="articleForm" method="POST" enctype="multipart/form-data">
+<form id="articleForm" method="POST" enctype="multipart/form-data">
     <div class="mb-4">
         <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
         <input type="text" id="title" name="title" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" required>
@@ -195,12 +201,15 @@ if ($userLoggedIn) {
         <small class="text-gray-500">Hold Ctrl (or Command on Mac) to select multiple tags.</small>
     </div>
     <div class="sm:flex sm:items-center">
-        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm">
+        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
             Add Article
         </button>
-        <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal()">
-            Cancel
-        </button>
+        <button 
+  type="button" 
+  class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+  onclick="closeModal()">
+  Cancel
+</button>
     </div>
 </form>
 
