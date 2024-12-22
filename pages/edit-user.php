@@ -80,10 +80,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_user"])) {
       </select>
 
       <div class="flex justify-end">
-        <a href="dashboard.php" class="text-gray-700 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md mr-2">
+        <a href="dashboard.php" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:bg-white dark:text-gray-900 dark:border-gray-200 dark:hover:bg-gray-100 dark:hover:text-blue-700 dark:focus:ring-gray-100">
           Annuler
         </a>
-        <button type="submit" name="update_user" class="text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-md">
+        <button type="submit" name="update_user" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
           Enregistrer
         </button>
       </div>

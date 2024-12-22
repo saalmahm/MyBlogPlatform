@@ -36,7 +36,6 @@ if (isset($_GET['delete_user_id'])) {
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
 
-    echo "Utilisateur et toutes ses données ont été supprimés avec succès.";
 }
 if ($userLoggedIn) {
     $userId = $_SESSION['user_id'];

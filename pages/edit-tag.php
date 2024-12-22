@@ -72,10 +72,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_tag"])) {
         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm mb-4"
       >
       <div class="flex justify-end">
-        <a href="bord-tags.php" class="text-gray-700 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md mr-2">
-          Annuler
-        </a>
-        <button type="submit" name="update_tag" class="text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-md">
+      <a href="bord-tags.php" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:bg-white dark:text-gray-900 dark:border-gray-200 dark:hover:bg-gray-100 dark:hover:text-blue-700 dark:focus:ring-gray-100">
+  Annuler
+</a>
+
+        <button type="submit" name="update_tag" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
           Enregistrer
         </button>
       </div>
