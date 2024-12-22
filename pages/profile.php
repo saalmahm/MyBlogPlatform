@@ -87,7 +87,7 @@ if ($userLoggedIn) {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<header class="flex justify-between p-4">
+<header class="flex justify-between p-4 fixed top-0 left-0 right-0 bg-white shadow-md z-50">
     <a href="/index.php" id="cars">
         <img src="images/cars.gif" alt="">
     </a>
@@ -145,8 +145,8 @@ if ($userLoggedIn) {
         </ul>
     </div>
 </header>
-    <section class="bg-blue-200 py-4 relative flex justify-between">
-        <div class="px-6 lg:right-2">
+    <section class="bg-blue-200 py-4 relative flex justify-between mt-20">
+        <div class="flex justify-between">
           <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-4"> 
                 <?php if (isset($_SESSION['username'])) {
                     echo "Welcome " . htmlspecialchars($_SESSION['username'])." to your account ";
@@ -154,13 +154,8 @@ if ($userLoggedIn) {
                     echo "Welcome, Guest "; 
                 } ?> 
             </h1>                      
-            <button 
-  class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800" 
-  onclick="openModal()">
-  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-    + Add an article
-  </span>
-</button>
+            <a href="manage_comments.php" class="text-blue-600">View or Manage Your Comments</a>
+
         </div>
     </section>
 
@@ -227,8 +222,16 @@ if ($userLoggedIn) {
  </div>
 <section>
     <div class="container mx-auto px-4 mt-10"> 
-    <h2 class="text-3xl font-bold text-gray-800 mb-6">Articles que tu as crée</h2> 
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+<div class="flex justify-between"> 
+       <h2 class="text-3xl font-bold text-gray-800 mb-6">Articles que tu as crée</h2> 
+    <button 
+  class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800" 
+  onclick="openModal()">
+  <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+    + Add an article
+  </span>
+</button></div>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-10">
              <?php 
               $user_id = $_SESSION['user_id'];
             $query = "SELECT articles.*, 
